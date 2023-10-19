@@ -203,3 +203,8 @@ body{
 .send-btn{
   background-color: red;
 }
+.chat-con{
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+}
