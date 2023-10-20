@@ -38,28 +38,22 @@ function Chat({ socket, username, room, newChat }) {
 
   const deleteMsg = (id) => {
     setShowIcon(true);
-    // alert(id)
     setID(id);
   };
   const deleteMessage =   () => {
     setShowIcon(false);
-    // setID(id)
     sendMessage();
     messageList.splice(ID, 1);
     setMessageList([...messageList]);
   };
+  const firstNonEmptyAuthor = messageList.find(item => item.author !== username)?.author;
 
-  const author = (n) => {
-    setName(n);
-  };
-
+  const usernameToUse = username !== firstNonEmptyAuthor ? firstNonEmptyAuthor : username;
+  
   return (
     <div className="chat-window">
       <div className="chat-header">
-        {/* <p>Live Chat&nbsp;&nbsp;&nbsp;{messageList.map((item)=>item.author).at(0)}</p> */}
-        <p>
-          Id : {room}&nbsp;&nbsp;&nbsp;Name : {username === name ? username : name}
-        </p>
+        <p> Id : {room}&nbsp;&nbsp;&nbsp;Name : {usernameToUse === username ? username:firstNonEmptyAuthor}</p>
       </div>
       <div className="chat-body">
         <ScrollToBottom className="message-container">
@@ -70,7 +64,7 @@ function Chat({ socket, username, room, newChat }) {
                 id={username !== messageContent.author ? "you" : "other"}
               >
               
-              {/* author(messageContent.author)}   */}
+          {/* author(messageContent.author)}   */}
                 <div>
                   <div className="message-content">
                     <p>{messageContent.message}</p>
