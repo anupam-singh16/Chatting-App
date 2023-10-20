@@ -208,3 +208,16 @@ body{
   display: flex;
   justify-content: space-between;
 }
+.dele-msg{
+  background-color: #5c6969;
+  padding: 2% 2%;
+  /* position: absolute;
+  top: 13%;
+  right: 5%; */
+  color: white;
+  border-radius: 9px;
+  cursor: pointer;
+}
+img{
+  cursor: pointer;
+}
