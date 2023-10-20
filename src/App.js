@@ -1,6 +1,5 @@
 import React from 'react'
 import Room from "./createRoom"
-import Chat from './Chat';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const App = () => {

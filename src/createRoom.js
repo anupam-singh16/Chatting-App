@@ -2,8 +2,7 @@ import "./App.css";
 import io from "socket.io-client";
 import { useState } from "react";
 import Chat from "./Chat";
-import { Outlet, Link } from "react-router-dom";
-
+// import { Outlet, Link } from "react-router-dom";
 
 const socket = io.connect("http://localhost:3001");
 
@@ -11,21 +10,18 @@ function App() {
   const [username, setUsername] = useState("");
   const [room, setRoom] = useState("");
   const [showChat, setShowChat] = useState(null);
-  const [valid,setValid] = useState(null)
+  const [valid, setValid] = useState(null);
 
   const joinRoom = () => {
-    setValid(false)
-    // setShowChat(sfalse);
-    if (username !== "" ) {
-    //   setValid(false);
-      if(room !== ""){
-      socket.emit("join_room",room);
-      setShowChat(true);
-      setValid(true);
-    //   multipleUser.push(username,room)
+    setValid(false);
+    if (username !== "") {
+      if (room !== "") {
+        socket.emit("join_room", room);
+        setShowChat(true);
+        setValid(true);
       }
-    }else{
-      setValid(true)
+    } else {
+      setValid(true);
     }
   };
 
@@ -38,23 +34,27 @@ function App() {
             type="text"
             placeholder="Name*"
             onChange={(event) => {
-                setUsername(event.target.value);
+              setUsername(event.target.value);
             }}
           />
-          {/* {valid === true?"please fill name ":""} */}
+          {valid === true ? "please fill name " : ""}
           <input
             type="text"
             placeholder="Room ID*"
             onChange={(event) => {
-                setRoom( event.target.value);
+              setRoom(event.target.value);
             }}
           />
-          {/* {valid === false ?"please enter room id":""} */}
-        <button onClick={joinRoom}>Join A Room</button>
+          {valid === false ? "please enter room id" : ""}
+          <button onClick={joinRoom}>Join A Room</button>
         </div>
       ) : (
-       
-        <Chat socket={socket} username={username} newChat={setShowChat} room={room} />
+        <Chat
+          socket={socket}
+          username={username}
+          newChat={setShowChat}
+          room={room}
+        />
       )}
     </div>
   );
