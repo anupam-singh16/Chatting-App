@@ -9,13 +9,13 @@ function Chat({ socket, username, room, newChat }) {
   const [messageList, setMessageList] = useState([]);
   const [ID, setID] = useState(null);
   const [showIcon, setShowIcon] = useState(false);
-  const [name, setName] = useState();
-  console.log("messageList messageList", messageList);
+  // const [name, setName] = useState();
+  
 
-const msgLength = messageList.length !== messageList
+  const msgLength = messageList.length !== messageList;
 
   const sendMessage = async () => {
-    setShowIcon(false)
+    setShowIcon(false);
     if (currentMessage !== "") {
       const messageData = {
         room: room,
@@ -39,57 +39,48 @@ const msgLength = messageList.length !== messageList
     socket.on("receive_message", (data) => {
       setMessageList((list) => [...list, data]);
     });
-  }, [socket,msgLength]);
-
-
- 
+  }, [socket, msgLength]);
 
   const deleteMsg = (id) => {
     setShowIcon(true);
     setID(id);
   };
-  const deleteMessage =   () => {
+  const deleteMessage = () => {
     setShowIcon(false);
-    // sendMessage();
-    // messageList.splice(ID, 1);
-    // setMessageList([...messageList]);
-
-    const updatedMessages = [...messageList];
-    updatedMessages .splice(ID, 1);
-    setMessageList(updatedMessages);  
-
-   
+    sendMessage();
+    messageList.splice(ID, 1);
+    setMessageList([...messageList]);
   };
-  const editMsg =(id)=>{
-    setCurrentMessage(messageList[id].message)
-    }
+  const editMsg = (id) => {
+    setCurrentMessage(messageList[id].message);
+  };
 
+  const firstNonEmptyAuthor = messageList.find(
+    (item) => item.author !== username
+  )?.author;
 
-
-
-  const firstNonEmptyAuthor = messageList.find(item => item.author !== username)?.author;
-
-  const usernameToUse = username !== firstNonEmptyAuthor ? firstNonEmptyAuthor : username;
-  
- 
+  const usernameToUse =
+    username !== firstNonEmptyAuthor ? firstNonEmptyAuthor : username;
 
   return (
     <div className="chat-window">
       <div className="chat-header">
-        <p> Id : {room}&nbsp;&nbsp;&nbsp;Name : {usernameToUse === username ? username:firstNonEmptyAuthor}</p>
+        <p>
+          {" "}
+          Id : {room}&nbsp;&nbsp;&nbsp;Name :{" "}
+          {usernameToUse === username ? username : firstNonEmptyAuthor}
+        </p>
       </div>
       <div className="chat-body">
         <ScrollToBottom className="message-container">
           {messageList.map((messageContent, idx) => {
             return (
-              <div 
+              <div
                 className="message"
                 id={username !== messageContent.author ? "you" : "other"}
               >
-              
                 <div>
                   <div className="message-content">
-                  
                     <p>{messageContent.message}</p>
                     {username !== messageContent.author ? (
                       ""
@@ -103,12 +94,9 @@ const msgLength = messageList.length !== messageList
                     )}
                   </div>
                   {showIcon === true && ID === idx ? (
-                    <div
-                      className="dele-msg"
-                      onClick={deleteMessage}
-                    >
-                    <p>  delete</p>
-                    <p onClick={()=>editMsg(idx)} >edit</p>
+                    <div className="dele-msg" onClick={deleteMessage}>
+                      <p> delete</p>
+                      <p onClick={() => editMsg(idx)}>edit</p>
                     </div>
                   ) : (
                     ""
