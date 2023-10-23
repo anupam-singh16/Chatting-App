@@ -12,13 +12,18 @@ function Chat({ socket, username, room, newChat }) {
   const [name, setName] = useState();
   console.log("messageList messageList", messageList);
 
+const msgLength = messageList.length !== messageList
+
   const sendMessage = async () => {
+    setShowIcon(false)
     if (currentMessage !== "") {
       const messageData = {
         room: room,
         author: username,
         message: currentMessage,
         time:
+          new Date(Date.now()).getDate() +
+          ":" +
           new Date(Date.now()).getHours() +
           ":" +
           new Date(Date.now()).getMinutes(),
@@ -34,7 +39,10 @@ function Chat({ socket, username, room, newChat }) {
     socket.on("receive_message", (data) => {
       setMessageList((list) => [...list, data]);
     });
-  }, [socket]);
+  }, [socket,msgLength]);
+
+
+ 
 
   const deleteMsg = (id) => {
     setShowIcon(true);
@@ -42,14 +50,29 @@ function Chat({ socket, username, room, newChat }) {
   };
   const deleteMessage =   () => {
     setShowIcon(false);
-    sendMessage();
-    messageList.splice(ID, 1);
-    setMessageList([...messageList]);
+    // sendMessage();
+    // messageList.splice(ID, 1);
+    // setMessageList([...messageList]);
+
+    const updatedMessages = [...messageList];
+    updatedMessages .splice(ID, 1);
+    setMessageList(updatedMessages);  
+
+   
   };
+  const editMsg =(id)=>{
+    setCurrentMessage(messageList[id].message)
+    }
+
+
+
+
   const firstNonEmptyAuthor = messageList.find(item => item.author !== username)?.author;
 
   const usernameToUse = username !== firstNonEmptyAuthor ? firstNonEmptyAuthor : username;
   
+ 
+
   return (
     <div className="chat-window">
       <div className="chat-header">
@@ -64,9 +87,9 @@ function Chat({ socket, username, room, newChat }) {
                 id={username !== messageContent.author ? "you" : "other"}
               >
               
-          {/* author(messageContent.author)}   */}
                 <div>
                   <div className="message-content">
+                  
                     <p>{messageContent.message}</p>
                     {username !== messageContent.author ? (
                       ""
@@ -84,7 +107,8 @@ function Chat({ socket, username, room, newChat }) {
                       className="dele-msg"
                       onClick={deleteMessage}
                     >
-                      delete
+                    <p>  delete</p>
+                    <p onClick={()=>editMsg(idx)} >edit</p>
                     </div>
                   ) : (
                     ""
